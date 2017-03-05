@@ -85,11 +85,17 @@ def parse_alexa(request):
 			}
 		})
 	intent = request.json['request']['intent']
-	if intent['name'] in ['AMAZON.PauseIntent', 'AudioPlayer.PlaybackStarted', 'AudioPlayer.PlaybackStopped',
-		'AudioPlayer.PlaybackNearlyFinished', 'AMAZON.ResumeIntent']:
+
+	if intent['name'] not in ['Romance']:
 		return request.Response(code=200)
+
 	if intent['name'] == 'Romance':
-		occation = intent['slots']['occation']['value']
+		occation = intent['slots']['occation']['value'].lower()
+		if occation == 'party':
+			return play_party(request)
+		if occation == 'lullaby':
+			return play_lullaby(request)
+
 		response = {
 			"version": "1.0",
 			"sessionAttributes": {},
@@ -128,12 +134,97 @@ def parse_alexa(request):
 		return request.Response(json=response)
 
 
+def play_lullaby(request):
+	response = {
+		"version": "1.0",
+		"sessionAttributes": {},
+		"response": {
+			"outputSpeech": {
+				"type": "PlainText",
+				"text": None
+			},
+			"card": {
+				"type": "Simple",
+				"title": "Play Audio",
+				"content": "Playing lullaby song."
+			},
+			"reprompt": {
+				"outputSpeech": {
+					"type": "PlainText",
+					"text": None
+				}
+			},
+			"directives": [
+				{
+					"type": "AudioPlayer.Play",
+					"playBehavior": "REPLACE_ALL",
+					"audioItem": {
+						"stream": {
+							"token": "7b94d4ea-c60a-4df0-99dd-5e6156eea2d4",
+							"url": "https://moorthi07.github.io/HappyDay/Lullaby.mp3",
+							"offsetInMilliseconds": 0
+						}
+					}
+				}
+			],
+			"shouldEndSession": True
+		}
+	}
+	request.Response(json=response)
+
+	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
+	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+	for i in range(100):
+		payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+		time.sleep(0.3)
+	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
+	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+
+
 def play_party(request):
 	"""
 	Play party scenes 
 	:param request: 
 	:return: 
 	"""
+	response = {
+		"version": "1.0",
+		"sessionAttributes": {},
+		"response": {
+			"outputSpeech": {
+				"type": "PlainText",
+				"text": None
+			},
+			"card": {
+				"type": "Simple",
+				"title": "Play Audio",
+				"content": "Playing party song."
+			},
+			"reprompt": {
+				"outputSpeech": {
+					"type": "PlainText",
+					"text": None
+				}
+			},
+			"directives": [
+				{
+					"type": "AudioPlayer.Play",
+					"playBehavior": "REPLACE_ALL",
+					"audioItem": {
+						"stream": {
+							"token": "7b94d4ea-c60a-4df0-99dd-5e6156eea2d4",
+							"url": "https://moorthi07.github.io/HappyDay/HappyMichaelJacksonBad.mp3",
+							"offsetInMilliseconds": 0
+						}
+					}
+				}
+			],
+			"shouldEndSession": True
+		}
+	}
+	request.Response(json=response)
+
 	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
 
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
@@ -147,19 +238,26 @@ def play_party(request):
 
 def parse_recognition(request):
 	"""
-	
 	:param request: 
 	:return: 
 	"""
-	os.system('say -v Samantha "Alexa"')
-	time.sleep(1)
-	os.system('say -v Samantha "play Romance from Happy Day"')
+	if 'type' not in request.query:
+		return request.Response(code=200)
+	if request.query['type'].lower() == 'bark':
+		os.system('say -v Samantha "Alexa"')
+		time.sleep(1)
+		os.system('say -v Samantha "play scene bark from Happy Day"')
+	else:
+		os.system('say -v Samantha "Alexa"')
+		time.sleep(1)
+		os.system('say -v Samantha "play scene lalubaby from Happy Day"')
 
 	return request.Response(code=200)
 
 
 app = Application()
 
+app.router.add_route('/', default, method='GET')
 app.router.add_route('/', parse_alexa, method='POST')
 app.router.add_route('/calendar', play, method='POST')
 app.router.add_route('/alexa', parse_alexa, method='POST')
