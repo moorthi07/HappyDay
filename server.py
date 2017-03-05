@@ -177,9 +177,9 @@ def play_lullaby(request):
 	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 	for i in range(100):
-		payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_BLUE2']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		time.sleep(0.3)
+		time.sleep(0.5)
 	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 
@@ -286,6 +286,7 @@ def play_birtyday(request):
 	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 
+
 def play_romance(request):
 	response = {
 		"version": "1.0",
@@ -328,11 +329,12 @@ def play_romance(request):
 
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 	for i in range(100):
-		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_FREE_GREEN']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		time.sleep(0.1)
+		time.sleep(0.5)
 	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+
 
 def parse_recognition(request):
 	"""
