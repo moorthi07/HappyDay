@@ -356,6 +356,7 @@ def play_romance(request):
 	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+	requests.get('https://6e8f7148.ngrok.io/OEntity/flashscreen.html')
 	for i in range(100):
 		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_FREE_GREEN']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
