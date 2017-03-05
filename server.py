@@ -86,8 +86,8 @@ def parse_alexa(request):
 		})
 	intent = request.json['request']['intent']
 	if intent['name'] in ['AMAZON.PauseIntent', 'AudioPlayer.PlaybackStarted', 'AudioPlayer.PlaybackStopped',
-		'AudioPlayer.PlaybackNearlyFinished']:
-		return
+		'AudioPlayer.PlaybackNearlyFinished', 'AMAZON.ResumeIntent']:
+		return request.Response(code=200)
 	if intent['name'] == 'Romance':
 		occation = intent['slots']['occation']['value']
 		response = {
@@ -145,10 +145,24 @@ def play_party(request):
 	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 
 
+def parse_recognition(request):
+	"""
+	
+	:param request: 
+	:return: 
+	"""
+	os.system('say -v Samantha "Alexa"')
+	time.sleep(1)
+	os.system('say -v Samantha "play Romance from Happy Day"')
+
+	return request.Response(code=200)
+
+
 app = Application()
 
 app.router.add_route('/', parse_alexa, method='POST')
 app.router.add_route('/calendar', play, method='POST')
 app.router.add_route('/alexa', parse_alexa, method='POST')
+app.router.add_route('/play', parse_recognition, method='GET')
 
 app.run(debug=True, port=4000)
