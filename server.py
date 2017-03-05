@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
+import json
+import os
 import random
 import time
 
-import os
 import requests
 from japronto import Application
 
