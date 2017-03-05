@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import json
+import math
 import os
 import random
 import time
+from datetime import datetime
 
 import requests
 from japronto import Application
@@ -30,7 +32,9 @@ FEBREZE_ACTIONS = {
 	'COLOR_MAGENTA': {'DeviceAction': 'led_color=0,3,4,4,4'},
 	'COLOR_WHITE': {'DeviceAction': 'led_color=0,4,4,4,4'},
 	'COLOR_SUN': {'DeviceAction': 'led_color=0,13,4,4,4'},
-	'COLOR_ICE': {'DeviceAction': 'led_color=0,14,4,4,4'}
+	'COLOR_ICE': {'DeviceAction': 'led_color=0,14,4,4,4'},
+	'SPRAY_LEFT': {'DeviceAction': 'trigger_1=127,X,2,1'},
+	'SPRAY_RIGHT': {'DeviceAction': 'trigger_1=127,X,2,2'}
 }
 
 FEBREZE_COLORS = list(filter(lambda x: 'COLOR' in x, FEBREZE_ACTIONS.keys()))
@@ -174,7 +178,13 @@ def play_lullaby(request):
 	}
 	request.Response(json=response)
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
+	minutes = math.floor(
+		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+
+	FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
+		str(minutes))
+
+	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 	for i in range(100):
 		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_BLUE2']]
@@ -227,7 +237,13 @@ def play_party(request):
 	}
 	request.Response(json=response)
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
+	minutes = math.floor(
+		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+
+	FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
+		str(minutes))
+
+	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 	for i in range(100):
@@ -276,7 +292,13 @@ def play_birtyday(request):
 	}
 	request.Response(json=response)
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
+	minutes = math.floor(
+		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+
+	FEBREZE_ACTIONS['SPRAY_LEFT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_LEFT']['DeviceAction'].replace('X',
+		str(minutes))
+
+	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_LEFT']]
 
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 	for i in range(100):
@@ -325,7 +347,13 @@ def play_romance(request):
 	}
 	request.Response(json=response)
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
+	minutes = math.floor(
+		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+
+	FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
+		str(minutes))
+
+	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 
 	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 	for i in range(100):
