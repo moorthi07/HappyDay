@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+
 import math
 import os
 import random
@@ -100,6 +101,8 @@ def parse_alexa(request):
 			return play_lullaby(request)
 		if occation in ['happy birthday', 'happy', 'birthday', 'birth day']:
 			return play_birtyday(request)
+		if occation == 'romance':
+			return play_romance(request)
 
 		response = {
 			"version": "1.0",
