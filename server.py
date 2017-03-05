@@ -4,10 +4,9 @@ import json
 import math
 import os
 import random
+import requests
 import time
 from datetime import datetime
-
-import requests
 from japronto import Application
 
 FEBREZE_URL = 'https://na-hackathon-api.arrayent.io/v3/devices/33554440'
@@ -176,22 +175,25 @@ def play_lullaby(request):
 			"shouldEndSession": True
 		}
 	}
-	request.Response(json=response)
 
-	minutes = math.floor(
-		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+	def cb(r):
+		minutes = math.floor(
+			(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
 
-	FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
-		str(minutes))
+		FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
+			str(minutes))
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
-	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-	for i in range(100):
-		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_BLUE2']]
+		payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
+		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+		for i in range(10):
+			payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_BLUE2']]
+			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+			time.sleep(0.5)
+		payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		time.sleep(0.5)
-	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
-	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+
+	request.add_done_callback(cb)
+	return request.Response(json=response)
 
 
 def play_party(request):
@@ -235,23 +237,26 @@ def play_party(request):
 			"shouldEndSession": True
 		}
 	}
-	request.Response(json=response)
 
-	minutes = math.floor(
-		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+	def cb(r):
+		minutes = math.floor(
+			(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
 
-	FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
-		str(minutes))
+		FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
+			str(minutes))
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
+		payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 
-	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-	for i in range(100):
-		payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+		for i in range(10):
+			payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+			time.sleep(0.1)
+		payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		time.sleep(0.1)
-	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
-	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+
+	request.add_done_callback(cb)
+	return request.Response(json=response)
 
 
 def play_birtyday(request):
@@ -290,23 +295,26 @@ def play_birtyday(request):
 			"shouldEndSession": True
 		}
 	}
-	request.Response(json=response)
 
-	minutes = math.floor(
-		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+	def cb(r):
+		minutes = math.floor(
+			(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
 
-	FEBREZE_ACTIONS['SPRAY_LEFT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_LEFT']['DeviceAction'].replace('X',
-		str(minutes))
+		FEBREZE_ACTIONS['SPRAY_LEFT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_LEFT']['DeviceAction'].replace('X',
+			str(minutes))
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_LEFT']]
+		payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_LEFT']]
 
-	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-	for i in range(100):
-		payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+		for i in range(10):
+			payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+			time.sleep(0.1)
+		payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		time.sleep(0.1)
-	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
-	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+
+	request.add_done_callback(cb)
+	return request.Response(json=response)
 
 
 def play_romance(request):
@@ -345,24 +353,26 @@ def play_romance(request):
 			"shouldEndSession": True
 		}
 	}
-	request.Response(json=response)
 
-	minutes = math.floor(
-		(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
+	def cb(r):
+		minutes = math.floor(
+			(datetime.now() - datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).seconds / 60) - 2
 
-	FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
-		str(minutes))
+		FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'] = FEBREZE_ACTIONS['SPRAY_RIGHT']['DeviceAction'].replace('X',
+			str(minutes))
 
-	payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
+		payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 
-	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-	requests.get('http://6e8f7148.ngrok.io/imrelaypx.gif?a=flash&h=somestring ')
-	for i in range(100):
-		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_FREE_GREEN']]
+		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+		requests.get('http://6e8f7148.ngrok.io/imrelaypx.gif?a=flash&h=somestring ')
+		for i in range(10):
+			payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_FREE_GREEN']]
+			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+			time.sleep(0.5)
+		payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		time.sleep(0.5)
-	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
-	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+
+	return request.Response(json=response)
 
 
 def parse_recognition(request):
@@ -375,11 +385,11 @@ def parse_recognition(request):
 	if request.query['type'].lower() == 'bark':
 		os.system('say -v Samantha "Alexa"')
 		time.sleep(1)
-		os.system('say -v Samantha "play scene bark from Happy Day"')
+		os.system('say -v Samantha "play scene... bark... from Happy Day"')
 	else:
 		os.system('say -v Samantha "Alexa"')
 		time.sleep(1)
-		os.system('say -v Samantha "play scene lalubaby from Happy Day"')
+		os.system('say -v Samantha "play scene... lullaby... from Happy Day"')
 
 	return request.Response(code=200)
 
