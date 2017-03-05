@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-import json
-
 import math
 import os
 import random
-import requests
 import time
 from datetime import datetime
+
+import json
+import requests
 from japronto import Application
 
 FEBREZE_URL = 'https://na-hackathon-api.arrayent.io/v3/devices/33554440'
@@ -188,7 +188,7 @@ def play_lullaby(request):
 
 		payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		for i in range(10):
+		for i in range(3):
 			payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_BLUE2']]
 			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 			time.sleep(0.5)
@@ -251,7 +251,7 @@ def play_party(request):
 		payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_RIGHT']]
 
 		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		for i in range(10):
+		for i in range(3):
 			payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
 			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 			time.sleep(0.1)
@@ -309,7 +309,7 @@ def play_birtyday(request):
 		payload = [FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['SPRAY_LEFT']]
 
 		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
-		for i in range(10):
+		for i in range(3):
 			payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
 			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 			time.sleep(0.1)
@@ -368,13 +368,14 @@ def play_romance(request):
 
 		r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 		requests.get('http://6e8f7148.ngrok.io/imrelaypx.gif?a=flash&h=somestring ')
-		for i in range(10):
+		for i in range(3):
 			payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS['LIGHT_ON'], FEBREZE_ACTIONS['COLOR_FREE_GREEN']]
 			requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 			time.sleep(0.5)
 		payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 
+	request.add_done_callback(cb)
 	return request.Response(json=response)
 
 
