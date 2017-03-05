@@ -95,6 +95,8 @@ def parse_alexa(request):
 			return play_party(request)
 		if occation == 'lullaby':
 			return play_lullaby(request)
+		if occation in ['happy birthday', 'happy', 'birthday', 'birth day']:
+			return play_birtyday(request)
 
 		response = {
 			"version": "1.0",
@@ -102,7 +104,7 @@ def parse_alexa(request):
 			"response": {
 				"outputSpeech": {
 					"type": "PlainText",
-					"text": "Playing the requested song."
+					"text": "Can't play the requested song. Something interesting though..."
 				},
 				"card": {
 					"type": "Simple",
@@ -235,6 +237,102 @@ def play_party(request):
 	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
 	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 
+
+def play_birtyday(request):
+	response = {
+		"version": "1.0",
+		"sessionAttributes": {},
+		"response": {
+			"outputSpeech": {
+				"type": "PlainText",
+				"text": None
+			},
+			"card": {
+				"type": "Simple",
+				"title": "Play Audio",
+				"content": "Playing party song."
+			},
+			"reprompt": {
+				"outputSpeech": {
+					"type": "PlainText",
+					"text": None
+				}
+			},
+			"directives": [
+				{
+					"type": "AudioPlayer.Play",
+					"playBehavior": "REPLACE_ALL",
+					"audioItem": {
+						"stream": {
+							"token": "7b94d4ea-c60a-4df0-99dd-5e6156eea2d4",
+							"url": "https://moorthi07.github.io/HappyDay/HappyMichaelJacksonBad.mp3",
+							"offsetInMilliseconds": 0
+						}
+					}
+				}
+			],
+			"shouldEndSession": True
+		}
+	}
+	request.Response(json=response)
+
+	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
+
+	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+	for i in range(100):
+		payload = [FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+		time.sleep(0.1)
+	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
+	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+
+def play_romance(request):
+	response = {
+		"version": "1.0",
+		"sessionAttributes": {},
+		"response": {
+			"outputSpeech": {
+				"type": "PlainText",
+				"text": None
+			},
+			"card": {
+				"type": "Simple",
+				"title": "Play Audio",
+				"content": "Playing party song."
+			},
+			"reprompt": {
+				"outputSpeech": {
+					"type": "PlainText",
+					"text": None
+				}
+			},
+			"directives": [
+				{
+					"type": "AudioPlayer.Play",
+					"playBehavior": "REPLACE_ALL",
+					"audioItem": {
+						"stream": {
+							"token": "7b94d4ea-c60a-4df0-99dd-5e6156eea2d4",
+							"url": "https://moorthi07.github.io/HappyDay/Greesleeves_Mantovani.mp3",
+							"offsetInMilliseconds": 0
+						}
+					}
+				}
+			],
+			"shouldEndSession": True
+		}
+	}
+	request.Response(json=response)
+
+	payload = [FEBREZE_ACTIONS['LIGHT_ON']]
+
+	r = requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+	for i in range(100):
+		payload = [FEBREZE_ACTIONS['LIFTH_OFF'], FEBREZE_ACTIONS[random.choice(FEBREZE_COLORS)]]
+		requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
+		time.sleep(0.1)
+	payload = [FEBREZE_ACTIONS['LIFTH_OFF']]
+	requests.put(FEBREZE_URL, headers=FEBREZE_HEADERS, data=json.dumps(payload))
 
 def parse_recognition(request):
 	"""
